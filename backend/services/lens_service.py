@@ -190,10 +190,7 @@ def upload_image(page: Page, image_path: str) -> None:
         if camera_btn:
             camera_btn.click()
             print("Clicked camera button to open modal.")
-            page.screenshot(path="pipeline_upload_click_camera.png")
             page.wait_for_timeout(2000)
-            dismiss_popups(page)
-            page.screenshot(path="pipeline_upload_after_dismiss.png")
         else:
             print("Could not find visible camera button. Trying direct click anyway...")
             try:
