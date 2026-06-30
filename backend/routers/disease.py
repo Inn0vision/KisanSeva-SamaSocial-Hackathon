@@ -168,7 +168,7 @@ def chat_endpoint(req: ChatRequest):
             show_more.click()
             page.wait_for_timeout(2000)
         
-        textarea = page.locator('textarea[placeholder*="Ask"], textarea[placeholder*="search"], textarea.gLFyf').first
+        textarea = page.locator('textarea[aria-label*="Search"], textarea[placeholder*="Ask"], textarea[placeholder*="search"], textarea.gLFyf').first
         if not textarea.is_visible():
             page.keyboard.press("Escape")
             page.wait_for_timeout(1000)

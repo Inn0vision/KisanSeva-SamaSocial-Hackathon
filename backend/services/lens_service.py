@@ -52,10 +52,11 @@ def dismiss_popups(page: Page) -> None:
     try:
         page.keyboard.press("Escape")
         page.wait_for_timeout(500)
-        not_now = page.get_by_role("button", name="Not now").first
-        if not_now.is_visible():
-            not_now.click()
-            page.wait_for_timeout(500)
+        for name in ["Not now", "Accept all", "Reject all"]:
+            btn = page.get_by_role("button", name=name).first
+            if btn.is_visible():
+                btn.click()
+                page.wait_for_timeout(500)
     except Exception:
         pass
 
