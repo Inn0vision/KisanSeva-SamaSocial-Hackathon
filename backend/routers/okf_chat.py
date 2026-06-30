@@ -6,6 +6,8 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from sambanova import SambaNova
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,6 +16,8 @@ router = APIRouter(prefix="/api/okf", tags=["OKF Chat"])
 
 SAMBANOVA_API_KEY = os.environ.get("SAMBANOVA_API_KEY")
 MODEL_NAME = "DeepSeek-V3.1"
+
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
 # Initialize SambaNova Client
 client = None
@@ -25,6 +29,13 @@ if SAMBANOVA_API_KEY:
         )
     except Exception as e:
         print(f"Warning: Failed to initialize SambaNova client: {e}")
+
+gemini_client = None
+if GOOGLE_API_KEY:
+    try:
+        gemini_client = genai.Client(api_key=GOOGLE_API_KEY)
+    except Exception as e:
+        print(f"Warning: Failed to initialize Gemini client: {e}")
 
 class OKFKnowledgeBase:
     def __init__(self, directory_path):
@@ -77,6 +88,7 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     history: List[ChatMessage] = []
+    user_name: str = "Farmer"
 
 class ChatResponse(BaseModel):
     reply: str
@@ -84,8 +96,8 @@ class ChatResponse(BaseModel):
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
-    if not client:
-        raise HTTPException(status_code=500, detail="SambaNova API Key not configured in .env")
+    if not client and not gemini_client:
+        raise HTTPException(status_code=500, detail="No AI API Keys configured in .env")
         
     try:
         user_query = request.message
@@ -100,35 +112,75 @@ async def chat_endpoint(request: ChatRequest):
         
         # 3. Assemble chat history messages
         system_prompt = (
-            "You are an expert Agricultural AI for AgroSetu.\n"
-            "Provide highly accurate, actionable agricultural advice.\n\n"
+            f"You are AgroSetu's AI Farmer Guide, an expert in all agricultural matters.\n"
+            f"The user's name is {request.user_name}.\n"
+            "Provide highly accurate, actionable, and comprehensive agricultural advice.\n\n"
             "CRITICAL RULES:\n"
-            "1. Be concise and precise. Get straight to the point.\n"
-            "2. If the user greets you, respond with a very brief, polite greeting.\n"
-            "3. Use the provided context to answer if relevant. If the context does not contain the answer, simply answer using your general agricultural knowledge.\n"
-            "4. NEVER mention 'OKF', 'database', 'context', or 'provided information' in your response. Answer seamlessly.\n"
+            "1. Be concise, precise, and directly answer the farmer's question.\n"
+            f"2. If the user greets you, respond with a polite, brief greeting using their name (e.g. 'Hello {request.user_name}! How can I help you with your farm today?').\n"
+            "3. Use the provided context to answer if relevant. If the context does not contain the answer, seamlessly answer using your vast general agricultural knowledge.\n"
+            "4. NEVER mention 'OKF', 'database', 'context', or 'provided information' in your response.\n"
             "5. If asking about a disease/pest, prioritize organic methods first, then chemical.\n"
-            "6. Format cleanly with Markdown (bullet points, bolding). Keep paragraphs short."
+            "6. You can answer ANY question related to farming, crops, weather, soils, livestock, or market prices.\n"
+            "7. Format cleanly with Markdown (bullet points, bolding). Keep paragraphs short."
         )
         
-        messages = [{"role": "system", "content": system_prompt}]
+        assistant_reply = None
         
-        # Add past chat history
-        for msg in request.history:
-            messages.append({"role": msg.role, "content": msg.content})
+        if gemini_client:
+            try:
+                contents = []
+                for msg in request.history:
+                    role = "user" if msg.role == "user" else "model"
+                    contents.append(
+                        types.Content(
+                            role=role, 
+                            parts=[types.Part.from_text(text=msg.content)]
+                        )
+                    )
+                contents.append(
+                    types.Content(
+                        role="user",
+                        parts=[types.Part.from_text(text=augmented_prompt)]
+                    )
+                )
+
+                response = gemini_client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=contents,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_prompt,
+                        temperature=0.3,
+                        top_p=0.9
+                    )
+                )
+                assistant_reply = response.text
+                print("=====================================")
+                print(f"Model used for {request.user_name}: gemini-2.5-flash")
+                print("=====================================")
+            except Exception as e:
+                print(f"Gemini API failed: {e}. Falling back to SambaNova...")
+                
+        # 4. Fallback to SambaNova API if Gemini fails or is not available
+        if not assistant_reply and client:
+            messages = [{"role": "system", "content": system_prompt}]
+            for msg in request.history:
+                messages.append({"role": msg.role, "content": msg.content})
+            messages.append({"role": "user", "content": augmented_prompt})
             
-        # Add current augmented message
-        messages.append({"role": "user", "content": augmented_prompt})
-        
-        # 4. Call SambaNova API
-        response = client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=messages,
-            temperature=0.3,
-            top_p=0.9
-        )
-        
-        assistant_reply = response.choices[0].message.content
+            response = client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=messages,
+                temperature=0.3,
+                top_p=0.9
+            )
+            assistant_reply = response.choices[0].message.content
+            print("=====================================")
+            print(f"Model used for {request.user_name}: DeepSeek-V3.1 (SambaNova Fallback)")
+            print("=====================================")
+
+        if not assistant_reply:
+            raise HTTPException(status_code=500, detail="All AI models failed to respond.")
         
         # Extract source names for frontend citation
         sources = []

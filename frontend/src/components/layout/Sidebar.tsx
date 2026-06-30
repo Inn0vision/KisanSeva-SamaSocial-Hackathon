@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   LayoutDashboard, 
   Microscope, 
-  FlaskConical, 
+  Bot, 
   Map, 
   CloudRain, 
   Droplet, 
@@ -55,7 +55,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       labelKey: 'nav.CROP INTELLIGENCE',
       items: [
         { nameKey: 'nav.Disease detection', path: '/disease', icon: Microscope, alert: true },
-        { nameKey: 'nav.Pesticide guide', path: '/pesticide', icon: FlaskConical },
+        { nameKey: 'nav.Farmer AI', path: '/pesticide', icon: Bot },
         { nameKey: 'nav.Land analysis', path: '/land', icon: Map }
       ]
     },

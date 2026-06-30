@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
-import { FlaskConical, Send, User, Bot, Loader2, BookOpen } from 'lucide-react'
+import { Send, User, Bot, Loader2, BookOpen, Leaf, Trash2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import EmptyState from '../components/shared/EmptyState'
+import { useAuthStore } from '../store/authStore'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -12,7 +13,20 @@ interface Message {
 }
 
 export default function Pesticide() {
-  const [messages, setMessages] = useState<Message[]>([])
+  const { profile } = useAuthStore()
+  
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const saved = localStorage.getItem('farmer_ai_chat')
+    if (saved) {
+      try { return JSON.parse(saved) } catch (e) { return [] }
+    }
+    return []
+  })
+  
+  useEffect(() => {
+    localStorage.setItem('farmer_ai_chat', JSON.stringify(messages))
+  }, [messages])
+
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -45,7 +59,8 @@ export default function Pesticide() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: userMsg,
-          history: historyToSend
+          history: historyToSend,
+          user_name: profile?.name?.split(' ')[0] || 'Farmer'
         })
       })
 
@@ -75,21 +90,30 @@ export default function Pesticide() {
     <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-120px)]">
       <div className="flex items-center gap-3 mb-6 shrink-0">
         <div className="w-10 h-10 rounded-lg gradient-green flex items-center justify-center text-white shadow-green-glow dark:shadow-[0_0_20px_rgba(63,185,80,0.20)]">
-          <FlaskConical size={20} />
+          <Leaf size={20} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#111827] dark:text-[#e6edf3]">Pesticide & Disease Guide</h1>
-          <p className="text-sm text-[#4b5563] dark:text-[#8b949e]">Powered by Open Knowledge Format (OKF) Agricultural DB</p>
+          <h1 className="text-2xl font-bold text-[#111827] dark:text-[#e6edf3]">Farmer AI Guide</h1>
+          <p className="text-sm text-[#4b5563] dark:text-[#8b949e]">Your intelligent 24/7 agricultural assistant</p>
         </div>
+        
+        {messages.length > 0 && (
+          <button 
+            onClick={() => setMessages([])} 
+            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-red-500 bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg shadow-sm transition-colors"
+          >
+            <Trash2 size={14} /> Clear Chat
+          </button>
+        )}
       </div>
       
       <div className="card-base flex-1 flex flex-col overflow-hidden p-0 bg-gray-50/50 dark:bg-[#0d1117]/50">
         {messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center p-6">
             <EmptyState 
-              icon={FlaskConical}
-              title="Ask the OKF Pesticide Expert"
-              description="Describe your crop issue (e.g., 'White spots on tomato leaves') and get safe, database-backed pesticide or organic recommendations."
+              icon={Leaf}
+              title="Ask the AgroSetu Farmer AI"
+              description="Ask any question about crops, pests, diseases, fertilizers, or general farming best practices to get expert recommendations."
               actionLabel="Type a message below to start"
               onAction={() => {}}
             />
@@ -158,7 +182,7 @@ export default function Pesticide() {
                 <div className="bg-white dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] shadow-sm rounded-2xl rounded-tl-sm px-5 py-4 flex flex-col gap-2">
                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
                      <Loader2 size={16} className="animate-spin text-[#16a34a]" />
-                     Querying OKF database...
+                     Thinking...
                    </div>
                    <div className="flex gap-1">
                      <span className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 animate-bounce" style={{ animationDelay: '0ms' }} />
@@ -183,7 +207,7 @@ export default function Pesticide() {
                 if (e.key === 'Enter') handleSend()
               }}
               className="input-base shadow-inner flex-1 bg-gray-50 dark:bg-[#0d1117]" 
-              placeholder="E.g., What is the best treatment for late blight on tomatoes?" 
+              placeholder="E.g., How much water does wheat need, or what cures late blight?" 
               disabled={isLoading}
             />
             <button 
