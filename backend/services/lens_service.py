@@ -141,25 +141,29 @@ def is_logged_in(page: Page) -> bool:
 
 def google_login(page: Page, email: str, password: str, no_input: bool = False) -> bool:
     print("🔐  Signing in to Google …")
-    page.goto("https://accounts.google.com/signin/v2/identifier", wait_until="domcontentloaded", timeout=30_000)
-    page.wait_for_timeout(1500)
+    try:
+        page.goto("https://accounts.google.com/signin/v2/identifier", wait_until="domcontentloaded", timeout=30_000)
+        page.wait_for_timeout(1500)
 
-    email_box = page.locator("input[name='identifier'], input[type='email'], input#identifierId")
-    email_box.wait_for(state="visible", timeout=10_000)
-    email_box.fill(email)
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(2500)
+        email_box = page.locator("input[name='identifier'], input[type='email'], input#identifierId").first
+        email_box.wait_for(state="visible", timeout=10_000)
+        email_box.fill(email)
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(2500)
 
-    pwd_box = page.locator("input[name='password'], input[type='password']")
-    pwd_box.wait_for(state="visible", timeout=10_000)
-    pwd_box.fill(password)
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(4000)
+        pwd_box = page.locator("input[name='Passwd']").first
+        pwd_box.wait_for(state="visible", timeout=10_000)
+        pwd_box.fill(password)
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(4000)
 
-    url = page.url
-    if "myaccount.google.com" in url or ("google.com" in url and "signin" not in url and "challenge" not in url):
-        print("✅  Login successful — session saved.")
-        return True
+        url = page.url
+        if "myaccount.google.com" in url or ("google.com" in url and "signin" not in url and "challenge" not in url):
+            print("✅  Login successful — session saved.")
+            return True
+    except Exception as e:
+        print(f"⚠️ Google Login Error: {e}")
+        return False
 
     return False
 
