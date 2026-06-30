@@ -13,6 +13,8 @@ services:
     restart: on-failure
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_EMAIL=${GOOGLE_EMAIL}
+      - GOOGLE_PASSWORD=${GOOGLE_PASSWORD}
     networks:
       - kisanseva_net
     ports:
