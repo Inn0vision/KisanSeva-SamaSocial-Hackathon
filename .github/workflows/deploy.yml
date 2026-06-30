@@ -18,7 +18,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Navigate to the project directory
-            cd /home/ubuntu/agrosetu
+            cd /home/ubuntu/KisanSeva-SamaSocial-Hackathon
             
             # Pull latest changes from the main branch
             git pull origin main
