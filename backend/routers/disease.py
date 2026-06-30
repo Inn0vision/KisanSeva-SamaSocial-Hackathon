@@ -82,18 +82,20 @@ def analyze_image_endpoint(file: UploadFile = File(...), language: str = Form("e
         ]
         
         chrome_exe = find_chrome()
-        if not chrome_exe:
-            raise HTTPException(status_code=500, detail="Chrome executable not found.")
 
-        ctx = pw.chromium.launch_persistent_context(
-            user_data_dir=temp_profile,
-            executable_path=chrome_exe,
-            headless=True,
-            viewport={"width": 1280, "height": 800},
-            no_viewport=False,
-            args=args,
-            ignore_default_args=["--enable-automation"],
-        )
+        launch_args = {
+            "user_data_dir": temp_profile,
+            "headless": True,
+            "viewport": {"width": 1280, "height": 800},
+            "no_viewport": False,
+            "args": args,
+            "ignore_default_args": ["--enable-automation"],
+        }
+        
+        if chrome_exe:
+            launch_args["executable_path"] = chrome_exe
+
+        ctx = pw.chromium.launch_persistent_context(**launch_args)
         
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
         if not is_logged_in(page):
