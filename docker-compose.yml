@@ -15,6 +15,7 @@ services:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - GOOGLE_EMAIL=${GOOGLE_EMAIL}
       - GOOGLE_PASSWORD=${GOOGLE_PASSWORD}
+      - SAMBANOVA_API_KEY=${SAMBANOVA_API_KEY}
     networks:
       - kisanseva_net
     ports:
