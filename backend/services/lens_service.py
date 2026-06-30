@@ -172,28 +172,39 @@ def upload_image(page: Page, image_path: str) -> None:
     # If Lens modal is not visible, click the camera icon to open it
     is_modal_visible = False
     try:
-        is_modal_visible = page.get_by_text("Drag an image here").first.is_visible() or page.locator("input[type='file']").first.is_visible()
+        is_modal_visible = page.get_by_text("Drag an image here").first.is_visible() or page.get_by_text("upload a file").first.is_visible()
     except Exception:
         pass
         
     if not is_modal_visible:
         print("Camera upload modal not visible. Trying to open it...")
-        camera_selectors = [
-            'div[aria-label="Search by image"]',
-            'button[aria-label="Search by image"]',
-            '[aria-label="Search by image"]',
-            '.nlaoCc'
-        ]
-        for sel in camera_selectors:
+        camera_btn = None
+        for sel in ['div[aria-label="Search by image"]', 'button[aria-label="Search by image"]', '[aria-label="Search by image"]', '.nlaoCc']:
             try:
-                btn = page.locator(sel).first
-                if btn.is_visible():
-                    btn.click()
-                    page.wait_for_timeout(2000)
-                    dismiss_popups(page)
-                    break
+                page.wait_for_selector(sel, state="visible", timeout=2000)
+                camera_btn = page.locator(sel).first
+                break
             except Exception:
                 continue
+                
+        if camera_btn:
+            camera_btn.click()
+            print("Clicked camera button to open modal.")
+            page.wait_for_timeout(2000)
+            dismiss_popups(page)
+        else:
+            print("Could not find visible camera button. Trying direct click anyway...")
+            try:
+                page.locator('[aria-label="Search by image"]').first.click(force=True)
+                page.wait_for_timeout(2000)
+            except Exception as e:
+                print(f"Direct click failed: {e}")
+
+    try:
+        page.wait_for_selector('text="upload a file"', state="visible", timeout=5000)
+        print("Upload modal is now visible.")
+    except Exception:
+        print("Warning: Upload modal not confirmed visible.")
 
     strategies = [
         ("upload_a_file_text", lambda: page.get_by_text("upload a file").first.click(timeout=3000)),
@@ -204,11 +215,14 @@ def upload_image(page: Page, image_path: str) -> None:
     with page.expect_file_chooser(timeout=15_000) as fc:
         for name, strategy in strategies:
             try:
+                print(f"Trying upload strategy: {name}")
                 strategy()
                 break
-            except Exception:
+            except Exception as e:
+                print(f"Strategy {name} failed: {e}")
                 continue
     fc.value.set_files(image_path)
+    print("Files set successfully.")
 
 def extract_results(page: Page) -> dict:
     page.wait_for_timeout(2500)
