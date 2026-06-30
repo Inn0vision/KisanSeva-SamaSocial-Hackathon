@@ -1,0 +1,48 @@
+name: Deploy AgroSetu to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Navigate to the project directory
+            cd /home/ubuntu/agrosetu
+            
+            # Pull latest changes from the main branch
+            git pull origin main
+            
+            # Stop the existing container if running
+            docker stop agrosetu-app || true
+            docker rm agrosetu-app || true
+            
+            # Export variables from .env to pass them as build args for Vite
+            export $(grep -v '^#' .env | xargs)
+            
+            # Build the new Docker image
+            docker build \
+              --build-arg VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY \
+              --build-arg VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN \
+              --build-arg VITE_FIREBASE_PROJECT_ID=$VITE_FIREBASE_PROJECT_ID \
+              --build-arg VITE_FIREBASE_STORAGE_BUCKET=$VITE_FIREBASE_STORAGE_BUCKET \
+              --build-arg VITE_FIREBASE_MESSAGING_SENDER_ID=$VITE_FIREBASE_MESSAGING_SENDER_ID \
+              --build-arg VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID \
+              -t agrosetu-app .
+            
+            # Run the new container on port 80 (redirecting to 8000 inside)
+            # using the existing .env file on the server
+            docker run -d --name agrosetu-app -p 80:8000 --env-file .env agrosetu-app
+            
+            # Remove old unused images to save disk space
+            docker image prune -f
