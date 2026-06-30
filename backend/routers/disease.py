@@ -98,11 +98,14 @@ def analyze_image_endpoint(file: UploadFile = File(...), language: str = Form("e
         ctx = pw.chromium.launch_persistent_context(**launch_args)
         
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
-        if not is_logged_in(page):
-            if not google_login(page, GOOGLE_EMAIL, GOOGLE_PASSWORD, no_input=True):
-                raise HTTPException(status_code=401, detail="Google authentication failed. Please run in headed mode first to authenticate.")
+        try:
+            if not is_logged_in(page):
+                google_login(page, GOOGLE_EMAIL, GOOGLE_PASSWORD, no_input=True)
+        except Exception as e:
+            print(f"⚠️ Login skipped or failed, proceeding anonymously: {e}")
         
         page.goto("https://lens.google.com/", wait_until="domcontentloaded", timeout=60_000)
+        dismiss_popups(page)
         page.wait_for_timeout(3000)
         upload_image(page, temp_path)
         
