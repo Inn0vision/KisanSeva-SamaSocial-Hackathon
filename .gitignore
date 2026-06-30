@@ -13,6 +13,7 @@
 .env.production.local
 *.pem
 credentials.json
+firebase.json
 firebase-credentials.json
 serviceAccountKey.json
 
