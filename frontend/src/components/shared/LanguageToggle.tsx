@@ -26,8 +26,8 @@ export default function LanguageToggle() {
             onClick={() => handleLanguageChange(opt.code)}
             className={`
               px-3.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 border-none cursor-pointer
-              ${isActive 
-                ? 'bg-white dark:bg-[#2d333b] text-[#15803d] dark:text-[#3fb950] font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.10)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.40)]' 
+              ${isActive
+                ? 'bg-white dark:bg-[#2d333b] text-[#15803d] dark:text-[#3fb950] font-semibold shadow-[0_1px_3px_rgba(0,0,0,0.10)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.40)]'
                 : 'bg-transparent text-[#6b7280] dark:text-[#8b949e] font-medium hover:text-[#374151] dark:hover:text-[#c9d1d9]'
               }
             `}

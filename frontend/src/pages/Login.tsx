@@ -39,82 +39,105 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f3f4f6] dark:bg-[#0d1117] flex items-center justify-center p-4">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white dark:bg-[#161b22] rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-[#30363d]"
-      >
-        <div className="p-8">
-          <div className="flex justify-center mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#16a34a] flex items-center justify-center">
-              <Leaf className="text-white" size={24} />
+    <div className="min-h-screen bg-[#f3f4f6] dark:bg-[#0d1117] flex">
+      {/* Left Side - Image & Branding (Hidden on Mobile) */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-[#16a34a] overflow-hidden">
+        <div className="absolute inset-0 bg-black/40 z-10" />
+        <img 
+          src="/login_bg.png" 
+          alt="Agriculture Tech" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="relative z-20 flex flex-col justify-center h-full p-16 text-white">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
+                <Leaf className="text-white" size={28} />
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight">KisanSeva</h1>
             </div>
-          </div>
-          
-          <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Welcome back to KisanSeva
-          </h2>
-          <p className="text-center text-gray-500 dark:text-gray-400 mb-8 text-sm">
-            Log in to access your personalized farming dashboard
-          </p>
+            <h2 className="text-5xl font-bold leading-tight mb-6">
+              Welcome back to <br/> your Digital Farm
+            </h2>
+            <p className="text-lg text-white/90 max-w-md leading-relaxed">
+              Log in to check your personalized dashboard, track weather conditions, and get actionable insights for a better yield.
+            </p>
+          </motion.div>
+        </div>
+      </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12">
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="w-full max-w-md"
+        >
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Sign In
+            </h2>
+            <p className="text-gray-500 dark:text-gray-400">
+              Access your personalized farming dashboard.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Email Address
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail size={18} className="text-gray-400" />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Mail size={18} className="text-gray-400 group-focus-within:text-[#16a34a] transition-colors" />
                 </div>
                 <input
                   type="email"
                   {...register('email')}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-[#30363d] rounded-lg bg-gray-50 dark:bg-[#0d1117] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16a34a] focus:border-transparent transition-colors"
+                  className="block w-full pl-11 pr-4 py-3 border border-gray-200 dark:border-[#30363d] rounded-xl bg-white dark:bg-[#161b22] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16a34a]/20 focus:border-[#16a34a] transition-all shadow-sm"
                   placeholder="farmer@example.com"
                 />
               </div>
-              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+              {errors.email && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.email.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 Password
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock size={18} className="text-gray-400" />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <Lock size={18} className="text-gray-400 group-focus-within:text-[#16a34a] transition-colors" />
                 </div>
                 <input
                   type="password"
                   {...register('password')}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-[#30363d] rounded-lg bg-gray-50 dark:bg-[#0d1117] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16a34a] focus:border-transparent transition-colors"
+                  className="block w-full pl-11 pr-4 py-3 border border-gray-200 dark:border-[#30363d] rounded-xl bg-white dark:bg-[#161b22] text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16a34a]/20 focus:border-[#16a34a] transition-all shadow-sm"
                   placeholder="••••••••"
                 />
               </div>
-              {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+              {errors.password && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.password.message}</p>}
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#15803d] hover:bg-[#166534] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#15803d] disabled:opacity-70 disabled:cursor-not-allowed transition-colors mt-6"
+              className="w-full flex items-center justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-md text-sm font-semibold text-white bg-[#16a34a] hover:bg-[#15803d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16a34a] disabled:opacity-70 disabled:cursor-not-allowed transition-all transform active:scale-[0.98] mt-8"
             >
               {isLoading ? <Loader2 size={20} className="animate-spin" /> : 'Sign In'}
             </button>
           </form>
-        </div>
-        
-        <div className="px-8 py-4 bg-gray-50 dark:bg-[#0d1117] border-t border-gray-100 dark:border-[#30363d] text-center">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-medium text-[#16a34a] hover:text-[#15803d] transition-colors">
-              Sign up now
-            </Link>
-          </p>
-        </div>
-      </motion.div>
+
+          <div className="mt-8 text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Don't have an account?{' '}
+              <Link to="/signup" className="font-semibold text-[#16a34a] hover:text-[#15803d] transition-colors">
+                Sign up now
+              </Link>
+            </p>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { Microscope, Upload, Search, Loader2, Send, Bot, User, Trash2 } from 'lucide-react'
+import { Microscope, Upload, Search, Loader2, Send, Bot, User, Trash2, Clock, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useScanStore } from '../store/scanStore'
 
 type ChatMessage = {
   id: string;
@@ -15,6 +16,7 @@ export default function Disease() {
   const [preview, setPreview] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const { scans, addScan } = useScanStore();
 
   
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -75,19 +77,25 @@ export default function Disease() {
       
       if (result.success) {
         setSessionId(result.session_id);
+        let overview = "";
         if (result.ai_overview && result.ai_overview.length > 0) {
+           overview = Array.isArray(result.ai_overview) ? result.ai_overview.join(" ") : result.ai_overview;
            setChatMessages([{
              id: 'initial',
              role: 'assistant',
              content: result.ai_overview
            }]);
         } else {
+           overview = "Analysis complete. Ask me any questions about this crop!";
            setChatMessages([{
              id: 'initial',
              role: 'assistant',
-             content: ["Analysis complete. Ask me any questions about this crop!"]
+             content: [overview]
            }]);
         }
+        
+        const summaryText = overview.substring(0, 60) + (overview.length > 60 ? "..." : "");
+        addScan({ summary: summaryText });
       } else {
         alert(result.detail || "Analysis failed");
       }
@@ -183,6 +191,31 @@ export default function Disease() {
               </button>
             </div>
           )}
+
+          {/* Recent Scans List */}
+          <div className="card-base mt-2">
+            <div className="flex items-center gap-2 font-bold text-[#111827] dark:text-[#e6edf3] mb-4">
+              <Clock size={18} className="text-[#16a34a]" />
+              {t('Recent Scans')}
+            </div>
+            
+            {scans.length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">{t('No recent scans')}</p>
+            ) : (
+              <div className="space-y-3">
+                {scans.map((scan) => (
+                  <div key={scan.id} className="flex flex-col gap-1 p-3 rounded-lg bg-gray-50 dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d]">
+                    <span className="text-xs text-gray-500 font-medium">
+                      {new Date(scan.date).toLocaleDateString()}
+                    </span>
+                    <p className="text-sm text-[#111827] dark:text-[#e6edf3] line-clamp-2">
+                      {scan.summary.replace(/[*#]/g, '')}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right Column: Results & Chat */}

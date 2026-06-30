@@ -4,6 +4,7 @@ import { Thermometer, Droplet, Leaf, Coins, Microscope, CloudRain, Landmark, Clo
 import AlertBanner from '../components/shared/AlertBanner'
 import MetricCard from '../components/shared/MetricCard'
 import { useAuthStore } from '../store/authStore'
+import { useScanStore } from '../store/scanStore'
 import { useTranslation } from 'react-i18next'
 import schemesData from '../data/schemes.json'
 import { Link } from 'react-router-dom'
@@ -33,6 +34,7 @@ const getWeatherDetails = (code: number) => {
 
 export default function Dashboard() {
   const { profile } = useAuthStore()
+  const { scans } = useScanStore()
   const { t } = useTranslation()
   
   const [weather, setWeather] = useState<{
@@ -251,15 +253,29 @@ export default function Dashboard() {
               </div>
             </div>
             
-            {/* Recent Scans History - Empty State */}
+            {/* Recent Scans History */}
             <div className="space-y-3 mb-6">
               <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('Recent Scans')}</h4>
               
-              <div className="flex flex-col items-center justify-center py-6 px-4 text-center rounded-lg border border-dashed border-gray-200 dark:border-[#30363d] bg-gray-50/50 dark:bg-[#161b22]/50">
-                 <Microscope size={24} className="text-gray-400 mb-2 opacity-50" />
-                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('No recent scans')}</p>
-                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{t('Scan a leaf to detect diseases early')}</p>
-              </div>
+              {scans.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-6 px-4 text-center rounded-lg border border-dashed border-gray-200 dark:border-[#30363d] bg-gray-50/50 dark:bg-[#161b22]/50">
+                   <Microscope size={24} className="text-gray-400 mb-2 opacity-50" />
+                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('No recent scans')}</p>
+                   <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{t('Scan a leaf to detect diseases early')}</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {scans.slice(0, 2).map(scan => (
+                    <Link key={scan.id} to="/disease" className="block p-3 rounded-lg border border-gray-100 dark:border-[#30363d] hover:border-[#16a34a]/30 dark:hover:border-[#3fb950]/30 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-colors">
+                      <div className="flex justify-between items-start mb-1">
+                        <span className="text-xs text-gray-500 font-medium">{new Date(scan.date).toLocaleDateString()}</span>
+                        <ArrowRight size={14} className="text-gray-400" />
+                      </div>
+                      <p className="text-sm text-[#111827] dark:text-[#e6edf3] line-clamp-1">{scan.summary.replace(/[*#]/g, '')}</p>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           
