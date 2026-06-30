@@ -1,0 +1,121 @@
+{
+  "nav": {
+    "OVERVIEW": "अवलोकन",
+    "Dashboard": "डैशबोर्ड",
+    "CROP INTELLIGENCE": "फसल बुद्धिमत्ता",
+    "Disease detection": "रोग का पता लगाना",
+    "Pesticide guide": "कीटनाशक गाइड",
+    "Land analysis": "भूमि विश्लेषण",
+    "CLIMATE": "जलवायु",
+    "Weather & alerts": "मौसम और अलर्ट",
+    "Water scarcity": "पानी की कमी",
+    "COMMUNITY": "समुदाय",
+    "Govt schemes": "सरकारी योजनाएं",
+    "Waste & recycle": "कचरा और रीसायकल",
+    "Farmer stories": "किसान की कहानियां",
+    "AI Chat": "AI चैट"
+  },
+  "dashboard": {
+    "greetingMorning": "सुप्रभात",
+    "greetingAfternoon": "नमस्कार",
+    "greetingEvening": "शुभ संध्या",
+    "farmer": "किसान",
+    "temperature": "तापमान",
+    "humidity": "नमी",
+    "cropHealth": "फसल का स्वास्थ्य",
+    "eligibleSchemes": "योग्य योजनाएं",
+    "diseaseScan": "फसल रोग स्कैन",
+    "scanCTA": "स्कैन के लिए फोटो अपलोड करें",
+    "scanDesc": "AI का उपयोग करके तुरंत बीमारियों का पता लगाएं। अपनी फसल की फोटो अपलोड करें।",
+    "topSchemes": "आपके लिए शीर्ष सरकारी योजनाएं",
+    "communityStories": "समुदाय की कहानियां",
+    "current": "वर्तमान",
+    "farmHealth": "फसल स्वास्थ्य स्कोर",
+    "basedOn": "मौसम, पानी और बीमारी पर आधारित",
+    "farmRisk": "फसल जोखिम संकेतक",
+    "lowRisk": "कम जोखिम",
+    "favorableConditions": "आज अनुकूल स्थिति",
+    "todaysChecklist": "आज की चेकलिस्ट",
+    "recentActivity": "हाल की गतिविधि",
+    "recommendedFor": "{{crop}} के लिए अनुशंसित",
+    "weatherAdvisory": "मौसम की चेतावनी:",
+    "weatherAdvisoryMsg": "{{city}} में मौसम बदलने की उम्मीद है। सिंचाई कार्यक्रम की समीक्षा करें।",
+    "viewAll": "सभी देखें",
+    "details": "विवरण"
+  },
+  "weather": {
+    "title": "मौसम और अलर्ट",
+    "currentConditions": "वर्तमान स्थिति",
+    "agronomicMetrics": "कृषि मेट्रिक्स",
+    "soilMoisture": "मिट्टी की नमी (0-10cm)",
+    "evapotranspiration": "वाष्पीकरण (ET0)",
+    "wind": "हवा",
+    "forecast": "५-दिन का पूर्वानुमान",
+    "today": "आज",
+    "sowingWindow": "बुवाई की खिड़की सक्रिय:",
+    "sowingMsg": "मिट्टी की नमी पर्याप्त है ({{moisture}}%)। खरीफ बुवाई का अच्छा समय।",
+    "optimal": "उपयुक्त"
+  },
+  "schemes": {
+    "title": "सरकारी योजनाएं",
+    "availableSchemes": "{{state}} में उपलब्ध योजनाएं",
+    "subsidy": "सब्सिडी: ",
+    "applyNow": "अभी आवेदन करें",
+    "close": "बंद करें",
+    "noSchemes": "आपके राज्य के लिए कोई योजना नहीं मिली।"
+  },
+  "disease": {
+    "title": "फसल रोग पहचान",
+    "subtitle": "तुरंत AI रोग विश्लेषण के लिए अपनी फसल की फोटो अपलोड करें",
+    "upload": "फसल फोटो अपलोड करें",
+    "dragDrop": "खींचें और छोड़ें या अपलोड करने के लिए क्लिक करें",
+    "analyzing": "विश्लेषण हो रहा है...",
+    "scanHistory": "स्कैन इतिहास",
+    "noHistory": "अभी तक कोई स्कैन नहीं",
+    "noHistoryMsg": "शुरू करने के लिए फसल की फोटो अपलोड करें",
+    "result": "रोग रिपोर्ट",
+    "confidence": "विश्वास स्तर",
+    "severity": "गंभीरता",
+    "treatment": "अनुशंसित उपचार",
+    "precautions": "सावधानियां",
+    "noReport": "कोई रिपोर्ट नहीं चुनी",
+    "noReportMsg": "विस्तृत AI विश्लेषण देखने के लिए हाल के इतिहास से एक स्कैन चुनें।",
+    "action": "अनुशंसित कार्रवाई"
+  },
+  "chat": {
+    "title": "AI कृषि सहायक",
+    "subtitle": "अपनी फसलों, मौसम, योजनाओं या खेत प्रबंधन के बारे में कुछ भी पूछें",
+    "placeholder": "अपनी फसलों के बारे में पूछें...",
+    "send": "भेजें",
+    "thinking": "सोच रहा है...",
+    "suggestedQuestions": "सुझाए गए प्रश्न"
+  },
+  "water": {
+    "title": "जल अभाव सलाहकार",
+    "subtitle": "अपने खेत की पानी की खपत की निगरानी और अनुकूलन करें"
+  },
+  "pesticide": {
+    "title": "कीटनाशक गाइड",
+    "subtitle": "आपकी फसलों के लिए सुरक्षित और प्रभावी कीटनाशक अनुशंसाएं"
+  },
+  "land": {
+    "title": "भूमि विश्लेषण",
+    "subtitle": "आपकी कृषि भूमि और मिट्टी के स्वास्थ्य के बारे में विस्तृत जानकारी"
+  },
+  "waste": {
+    "title": "कचरा और रीसायकल",
+    "subtitle": "आपके खेत के लिए टिकाऊ कचरा प्रबंधन"
+  },
+  "stories": {
+    "title": "किसानों की कहानियां",
+    "subtitle": "पूरे भारत के किसानों के वास्तविक अनुभव"
+  },
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "viewAll": "सभी देखें",
+    "details": "विवरण",
+    "back": "वापस",
+    "save": "सहेजें",
+    "cancel": "रद्द करें"
+  }
+}

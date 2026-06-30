@@ -1,0 +1,121 @@
+{
+  "nav": {
+    "OVERVIEW": "OVERVIEW",
+    "Dashboard": "Dashboard",
+    "CROP INTELLIGENCE": "CROP INTELLIGENCE",
+    "Disease detection": "Disease detection",
+    "Pesticide guide": "Pesticide guide",
+    "Land analysis": "Land analysis",
+    "CLIMATE": "CLIMATE",
+    "Weather & alerts": "Weather & alerts",
+    "Water scarcity": "Water scarcity",
+    "COMMUNITY": "COMMUNITY",
+    "Govt schemes": "Govt schemes",
+    "Waste & recycle": "Waste & recycle",
+    "Farmer stories": "Farmer stories",
+    "AI Chat": "AI Chat"
+  },
+  "dashboard": {
+    "greetingMorning": "Good Morning",
+    "greetingAfternoon": "Good Afternoon",
+    "greetingEvening": "Good Evening",
+    "farmer": "Farmer",
+    "temperature": "Temperature",
+    "humidity": "Humidity",
+    "cropHealth": "Crop Health",
+    "eligibleSchemes": "Eligible Schemes",
+    "diseaseScan": "Crop Disease Scan",
+    "scanCTA": "Upload Photo for Scan",
+    "scanDesc": "Detect diseases instantly using AI. Upload a photo of your crop.",
+    "topSchemes": "Top Govt Schemes for You",
+    "communityStories": "Community Stories",
+    "current": "Current",
+    "farmHealth": "Farm Health Score",
+    "basedOn": "Based on weather, water & disease",
+    "farmRisk": "Farm Risk Indicator",
+    "lowRisk": "Low Risk",
+    "favorableConditions": "Favorable conditions today",
+    "todaysChecklist": "Today's Checklist",
+    "recentActivity": "Recent Activity",
+    "recommendedFor": "Recommended for {{crop}}",
+    "weatherAdvisory": "Weather Advisory:",
+    "weatherAdvisoryMsg": "Changing weather conditions expected in {{city}}. Review your irrigation schedule.",
+    "viewAll": "View All",
+    "details": "Details"
+  },
+  "weather": {
+    "title": "Weather & Alerts",
+    "currentConditions": "Current Conditions",
+    "agronomicMetrics": "Agronomic Metrics",
+    "soilMoisture": "Soil Moisture (0-10cm)",
+    "evapotranspiration": "Evapotranspiration (ET0)",
+    "wind": "Wind",
+    "forecast": "5-Day Forecast",
+    "today": "Today",
+    "sowingWindow": "Sowing Window Active:",
+    "sowingMsg": "Soil moisture is adequate ({{moisture}}%). Good time for Kharif sowing.",
+    "optimal": "Optimal"
+  },
+  "schemes": {
+    "title": "Govt Schemes",
+    "availableSchemes": "Available Schemes in {{state}}",
+    "subsidy": "Subsidy: ",
+    "applyNow": "Apply Now",
+    "close": "Close",
+    "noSchemes": "No schemes found for your state."
+  },
+  "disease": {
+    "title": "Crop Disease Detection",
+    "subtitle": "Upload a photo of your crop to get instant AI-powered disease analysis",
+    "upload": "Upload Crop Photo",
+    "dragDrop": "Drag & drop or click to upload",
+    "analyzing": "Analyzing...",
+    "scanHistory": "Scan History",
+    "noHistory": "No scans yet",
+    "noHistoryMsg": "Upload a crop photo to get started",
+    "result": "Disease Report",
+    "confidence": "Confidence",
+    "severity": "Severity",
+    "treatment": "Recommended Treatment",
+    "precautions": "Precautions",
+    "noReport": "No Report Selected",
+    "noReportMsg": "Select a scan from your recent history to view detailed AI analysis.",
+    "action": "Recommended Action"
+  },
+  "chat": {
+    "title": "AI Farm Assistant",
+    "subtitle": "Ask anything about your crops, weather, schemes, or farm management",
+    "placeholder": "Ask about your crops...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "suggestedQuestions": "Suggested Questions"
+  },
+  "water": {
+    "title": "Water Scarcity Advisor",
+    "subtitle": "Monitor and optimize your farm's water usage"
+  },
+  "pesticide": {
+    "title": "Pesticide Guide",
+    "subtitle": "Safe and effective pesticide recommendations for your crops"
+  },
+  "land": {
+    "title": "Land Analysis",
+    "subtitle": "Detailed insights about your farm land and soil health"
+  },
+  "waste": {
+    "title": "Waste & Recycle",
+    "subtitle": "Sustainable waste management for your farm"
+  },
+  "stories": {
+    "title": "Farmer Stories",
+    "subtitle": "Real experiences from farmers across India"
+  },
+  "common": {
+    "loading": "Loading...",
+    "viewAll": "View All",
+    "details": "Details",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

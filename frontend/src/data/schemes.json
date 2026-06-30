@@ -1,0 +1,50 @@
+[
+  {
+    "id": "pm-kisan",
+    "title": "PM-KISAN Samman Nidhi",
+    "description": "Pradhan Mantri Kisan Samman Nidhi is an initiative by the government of India in which all farmers will get up to ₹6,000 per year as minimum income support.",
+    "subsidy": "₹6,000/year",
+    "states": ["All", "Maharashtra", "Uttar Pradesh", "Madhya Pradesh"],
+    "link": "https://pmkisan.gov.in/"
+  },
+  {
+    "id": "pmfby",
+    "title": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "description": "A comprehensive crop insurance scheme providing coverage against non-preventable natural risks from pre-sowing to post-harvest.",
+    "subsidy": "Premium Subsidy (Max 2% Kharif, 1.5% Rabi)",
+    "states": ["All", "Maharashtra", "Gujarat", "Rajasthan"],
+    "link": "https://pmfby.gov.in/"
+  },
+  {
+    "id": "kcc",
+    "title": "Kisan Credit Card (KCC)",
+    "description": "Meets the short term credit requirements of farmers for cultivation of crops, post-harvest expenses, and working capital for maintenance.",
+    "subsidy": "Subsidized Interest Rate (upto 3% subvention)",
+    "states": ["All"],
+    "link": "https://sbi.co.in/web/agri-rural/agriculture-banking/crop-loan/kisan-credit-card"
+  },
+  {
+    "id": "mgnrega",
+    "title": "Mahatma Gandhi National Rural Employment Guarantee Act",
+    "description": "Guarantees 100 days of wage employment in a financial year to a rural household whose adult members volunteer to do unskilled manual work.",
+    "subsidy": "Wage Employment",
+    "states": ["All"],
+    "link": "https://nrega.nic.in/"
+  },
+  {
+    "id": "maha-dbt",
+    "title": "MahaDBT Farmer Schemes",
+    "description": "Direct Benefit Transfer portal for Maharashtra farmers for agricultural mechanization, irrigation, and seed subsidies.",
+    "subsidy": "Varies (Upto 50%-80% on equipment)",
+    "states": ["Maharashtra"],
+    "link": "https://mahadbt.maharashtra.gov.in/"
+  },
+  {
+    "id": "bhavantar",
+    "title": "Bhavantar Bhugtan Yojana",
+    "description": "Compensates farmers for differences between official Minimum Support Price (MSP) and the rate at which they sell their crops.",
+    "subsidy": "Price Deficit Payment",
+    "states": ["Madhya Pradesh", "Haryana"],
+    "link": "https://mpkrishi.mp.gov.in/"
+  }
+]
