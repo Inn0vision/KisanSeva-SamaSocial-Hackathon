@@ -169,12 +169,37 @@ def google_login(page: Page, email: str, password: str, no_input: bool = False) 
     return False
 
 def upload_image(page: Page, image_path: str) -> None:
+    # If Lens modal is not visible, click the camera icon to open it
+    is_modal_visible = False
+    try:
+        is_modal_visible = page.get_by_text("Drag an image here").first.is_visible() or page.locator("input[type='file']").first.is_visible()
+    except Exception:
+        pass
+        
+    if not is_modal_visible:
+        print("Camera upload modal not visible. Trying to open it...")
+        camera_selectors = [
+            'div[aria-label="Search by image"]',
+            'button[aria-label="Search by image"]',
+            '[aria-label="Search by image"]',
+            '.nlaoCc'
+        ]
+        for sel in camera_selectors:
+            try:
+                btn = page.locator(sel).first
+                if btn.is_visible():
+                    btn.click()
+                    page.wait_for_timeout(2000)
+                    dismiss_popups(page)
+                    break
+            except Exception:
+                continue
+
     strategies = [
         ("upload_a_file_text", lambda: page.get_by_text("upload a file").first.click(timeout=3000)),
         ("file_input_click", lambda: page.locator("input[type='file']").first.click(force=True, timeout=3000)),
         ("jsname_click", lambda: page.locator("[jsname='R5mgy']").first.click(timeout=3000)),
         ("touch_wrapper_click", lambda: page.locator("[data-is-touch-wrapper='true']").first.click(timeout=3000)),
-        ("search_button_click", lambda: page.get_by_role("button", name="Search by image").click(timeout=3000)),
     ]
     with page.expect_file_chooser(timeout=15_000) as fc:
         for name, strategy in strategies:
