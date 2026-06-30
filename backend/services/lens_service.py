@@ -190,12 +190,15 @@ def upload_image(page: Page, image_path: str) -> None:
         if camera_btn:
             camera_btn.click()
             print("Clicked camera button to open modal.")
+            page.screenshot(path="pipeline_upload_click_camera.png")
             page.wait_for_timeout(2000)
             dismiss_popups(page)
+            page.screenshot(path="pipeline_upload_after_dismiss.png")
         else:
             print("Could not find visible camera button. Trying direct click anyway...")
             try:
                 page.locator('[aria-label="Search by image"]').first.click(force=True)
+                page.screenshot(path="pipeline_upload_direct_click.png")
                 page.wait_for_timeout(2000)
             except Exception as e:
                 print(f"Direct click failed: {e}")
@@ -205,6 +208,7 @@ def upload_image(page: Page, image_path: str) -> None:
         print("Upload modal is now visible.")
     except Exception:
         print("Warning: Upload modal not confirmed visible.")
+        page.screenshot(path="pipeline_upload_modal_not_visible.png")
 
     strategies = [
         ("upload_a_file_text", lambda: page.get_by_text("upload a file").first.click(timeout=3000)),
@@ -217,6 +221,7 @@ def upload_image(page: Page, image_path: str) -> None:
             try:
                 print(f"Trying upload strategy: {name}")
                 strategy()
+                page.screenshot(path=f"pipeline_upload_strategy_{name}.png")
                 break
             except Exception as e:
                 print(f"Strategy {name} failed: {e}")
