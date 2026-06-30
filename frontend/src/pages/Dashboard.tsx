@@ -119,8 +119,8 @@ export default function Dashboard() {
           </div>
           
           {profile?.name && (
-            <div className="hidden md:flex w-16 h-16 rounded-full bg-gradient-to-br from-[#16a34a] to-[#047857] shadow-lg items-center justify-center text-white text-2xl font-bold border-4 border-white dark:border-[#0d1117]">
-              {profile.name.charAt(0).toUpperCase()}
+            <div className="hidden md:flex px-6 h-16 rounded-full bg-gradient-to-br from-[#16a34a] to-[#047857] shadow-lg items-center justify-center text-white text-xl font-bold border-4 border-white dark:border-[#0d1117]">
+              {profile.name.split(' ')[0]}
             </div>
           )}
         </div>
@@ -253,12 +253,12 @@ export default function Dashboard() {
             
             {/* Recent Scans History - Empty State */}
             <div className="space-y-3 mb-6">
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Recent Scans</h4>
+              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('Recent Scans')}</h4>
               
               <div className="flex flex-col items-center justify-center py-6 px-4 text-center rounded-lg border border-dashed border-gray-200 dark:border-[#30363d] bg-gray-50/50 dark:bg-[#161b22]/50">
                  <Microscope size={24} className="text-gray-400 mb-2 opacity-50" />
-                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No recent scans</p>
-                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Scan a leaf to detect diseases early</p>
+                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('No recent scans')}</p>
+                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{t('Scan a leaf to detect diseases early')}</p>
               </div>
             </div>
           </div>
@@ -338,7 +338,7 @@ export default function Dashboard() {
         
         {/* Tooltip */}
         <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-bold rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap hidden md:flex items-center gap-2">
-          <span>Ask Farmer AI</span>
+          <span>{t('Ask Farmer AI')}</span>
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>

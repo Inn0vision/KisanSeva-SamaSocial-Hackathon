@@ -123,10 +123,10 @@ export default function Stories() {
         className="text-center mb-12"
       >
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-400 bg-clip-text text-transparent mb-4">
-          {t('stories.pageTitle', { defaultValue: 'The Future of Farming' })}
+          {t('The Future of Farming')}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          {t('stories.pageDesc', { defaultValue: 'How AI and Technology are Transforming Agriculture. From predictive climate modeling to robotic harvesters and smart dairy sensors, farmers around the globe are partnering with Artificial Intelligence (AI) to increase crop yields, reduce environmental impact, and feed a rapidly growing global population.' })}
+          {t('How AI and Technology are Transforming Agriculture. From predictive climate modeling to robotic harvesters and smart dairy sensors, farmers around the globe are partnering with Artificial Intelligence (AI) to increase crop yields, reduce environmental impact, and feed a rapidly growing global population.')}
         </p>
       </motion.div>
 
@@ -164,7 +164,7 @@ export default function Stories() {
               
               <div className="mb-4">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-                  <Cpu size={16} className="text-green-500" /> {t('stories.techUsed', { defaultValue: 'Technology Used' })}
+                  <Cpu size={16} className="text-green-500" /> {t('Technology Used')}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700/50">
                   {t(story.technology, { defaultValue: story.technology })}
@@ -180,7 +180,7 @@ export default function Stories() {
               <div className="mt-6 mb-6">
                 <div className="relative p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 border border-green-100 dark:border-green-900/20">
                   <h3 className="text-sm font-bold text-green-700 dark:text-green-400 mb-2 uppercase tracking-wide">
-                    {t('stories.impact', { defaultValue: 'The Impact' })}
+                    {t('The Impact')}
                   </h3>
                   <p className="text-sm text-gray-800 dark:text-gray-200 font-medium leading-relaxed">
                     {t(story.impact, { defaultValue: story.impact })}
@@ -194,7 +194,7 @@ export default function Stories() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-green-600 hover:text-green-500 dark:text-green-400 dark:hover:text-green-300 transition-colors"
               >
-                {t('stories.readOriginal', { defaultValue: 'Read Original Story' })} <ExternalLink size={16} />
+                {t('Read Original Story')} <ExternalLink size={16} />
               </a>
             </div>
           </motion.div>

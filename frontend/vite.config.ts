@@ -9,8 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'AgroSetu - Farmer AI Assistant',
-        short_name: 'AgroSetu',
+        name: 'KisanSeva - Farmer AI Assistant',
+        short_name: 'KisanSeva',
         description: 'AI-powered Climate Resilience Platform for Indian Farmers',
         theme_color: '#16a34a',
         background_color: '#f3f4f6',
@@ -30,4 +30,12 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      }
+    }
+  }
 })

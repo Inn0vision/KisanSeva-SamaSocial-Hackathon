@@ -4,6 +4,8 @@ import tempfile
 import uuid
 import os
 from pydantic import BaseModel
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form
+from google import genai
 from services.lens_service import (
     create_session_profile, find_chrome, is_logged_in, google_login,
     upload_image, extract_results, GOOGLE_EMAIL, GOOGLE_PASSWORD,
@@ -17,12 +19,44 @@ active_sessions = {}
 class ChatRequest(BaseModel):
     session_id: str
     question: str
+    language: str = "en"
 
 class CloseRequest(BaseModel):
     session_id: str
 
+def translate_text(text: str, target_lang_code: str) -> str:
+    if target_lang_code == "en" or not text: return text
+    try:
+        api_key = os.environ.get("GOOGLE_API_KEY")
+        if not api_key: return text
+        client = genai.Client(api_key=api_key)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"Translate the following text into the language with code '{target_lang_code}' (e.g. 'hi' for Hindi). Preserve all markdown formatting, bullet points, and exact structure. Only return the translated text.\n\n{text}"
+        )
+        return response.text
+    except Exception as e:
+        print(f"Translation failed: {e}")
+        return text
+
+def translate_blocks(blocks: list, target_lang_code: str) -> list:
+    if target_lang_code == "en" or not blocks: return blocks
+    try:
+        api_key = os.environ.get("GOOGLE_API_KEY")
+        if not api_key: return blocks
+        client = genai.Client(api_key=api_key)
+        joined_blocks = "\n---BLOCK_SEP---\n".join(blocks)
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"Translate the following text into the language with code '{target_lang_code}' (e.g. 'hi' for Hindi). Preserve all formatting and the exact separator '---BLOCK_SEP---'. Only return the translated text.\n\n{joined_blocks}"
+        )
+        return [b.strip() for b in response.text.split("---BLOCK_SEP---")]
+    except Exception as e:
+        print(f"Translation failed: {e}")
+        return blocks
+
 @router.post("/analyze")
-def analyze_image_endpoint(file: UploadFile = File(...)):
+def analyze_image_endpoint(file: UploadFile = File(...), language: str = Form("en")):
     suffix = os.path.splitext(file.filename)[1]
     with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_file:
         shutil.copyfileobj(file.file, temp_file)
@@ -85,10 +119,15 @@ def analyze_image_endpoint(file: UploadFile = File(...)):
             "temp_profile": temp_profile
         }
         
+        
+        ai_overview_text = results["ai_overview"]
+        if language != "en" and ai_overview_text:
+            ai_overview_text = [translate_text(text, language) for text in ai_overview_text]
+        
         return {
             "success": True,
             "session_id": session_id,
-            "ai_overview": results["ai_overview"],
+            "ai_overview": ai_overview_text,
             "url": results.get("url"),
             "title": results.get("title")
         }
@@ -111,6 +150,7 @@ def analyze_image_endpoint(file: UploadFile = File(...)):
 def chat_endpoint(req: ChatRequest):
     session_id = req.session_id
     question = req.question
+    lang = req.language
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found.")
     
@@ -138,6 +178,9 @@ def chat_endpoint(req: ChatRequest):
         success = wait_for_chat_response(page, prev_count)
         dismiss_popups(page)
         ans_blocks = extract_chat_blocks(page)
+        
+        if lang != "en" and ans_blocks:
+            ans_blocks = translate_blocks(ans_blocks, lang)
         
         return {
             "success": True,

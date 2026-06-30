@@ -53,7 +53,7 @@ export default function Login() {
           </div>
           
           <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Welcome back to AgroSetu
+            Welcome back to KisanSeva
           </h2>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-8 text-sm">
             Log in to access your personalized farming dashboard
@@ -99,7 +99,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#16a34a] hover:bg-[#15803d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#16a34a] disabled:opacity-70 disabled:cursor-not-allowed transition-colors mt-6"
+              className="w-full flex items-center justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#15803d] hover:bg-[#166534] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#15803d] disabled:opacity-70 disabled:cursor-not-allowed transition-colors mt-6"
             >
               {isLoading ? <Loader2 size={20} className="animate-spin" /> : 'Sign In'}
             </button>

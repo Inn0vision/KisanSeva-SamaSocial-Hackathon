@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import chat, disease, weather, schemes, land, water, okf_chat
 
-app = FastAPI(title="AgroSetu API", version="1.0.0")
+app = FastAPI(title="KisanSeva API", version="1.0.0")
 
 # CORS Configuration
 app.add_middleware(
@@ -24,4 +24,4 @@ app.include_router(okf_chat.router)
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to AgroSetu API"}
+    return {"message": "Welcome to KisanSeva API"}

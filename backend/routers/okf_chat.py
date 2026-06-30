@@ -89,6 +89,7 @@ class ChatRequest(BaseModel):
     message: str
     history: List[ChatMessage] = []
     user_name: str = "Farmer"
+    language: str = "en"
 
 class ChatResponse(BaseModel):
     reply: str
@@ -112,7 +113,7 @@ async def chat_endpoint(request: ChatRequest):
         
         # 3. Assemble chat history messages
         system_prompt = (
-            f"You are AgroSetu's AI Farmer Guide, an expert in all agricultural matters.\n"
+            f"You are KisanSeva's AI Farmer Guide, an expert in all agricultural matters.\n"
             f"The user's name is {request.user_name}.\n"
             "Provide highly accurate, actionable, and comprehensive agricultural advice.\n\n"
             "CRITICAL RULES:\n"
@@ -122,7 +123,8 @@ async def chat_endpoint(request: ChatRequest):
             "4. NEVER mention 'OKF', 'database', 'context', or 'provided information' in your response.\n"
             "5. If asking about a disease/pest, prioritize organic methods first, then chemical.\n"
             "6. You can answer ANY question related to farming, crops, weather, soils, livestock, or market prices.\n"
-            "7. Format cleanly with Markdown (bullet points, bolding). Keep paragraphs short."
+            "7. Format cleanly with Markdown (bullet points, bolding). Keep paragraphs short.\n"
+            f"8. IMPORTANT: You MUST respond entirely in the language corresponding to this code: {request.language} (e.g. 'hi' for Hindi, 'mr' for Marathi, 'en' for English)."
         )
         
         assistant_reply = None

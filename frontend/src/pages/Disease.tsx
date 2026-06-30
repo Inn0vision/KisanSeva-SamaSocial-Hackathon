@@ -9,7 +9,7 @@ type ChatMessage = {
 }
 
 export default function Disease() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -38,7 +38,7 @@ export default function Disease() {
 
   const closeSession = async (id: string) => {
     try {
-      await fetch('http://localhost:8000/api/disease/close', {
+      await fetch('/api/disease/close', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ session_id: id })
@@ -63,9 +63,10 @@ export default function Disease() {
 
     const formData = new FormData();
     formData.append("file", selectedFile);
+    formData.append("language", i18n.language);
 
     try {
-      const response = await fetch("http://localhost:8000/api/disease/analyze", {
+      const response = await fetch("/api/disease/analyze", {
         method: "POST",
         body: formData
       });
@@ -115,10 +116,10 @@ export default function Disease() {
     setIsSending(true);
 
     try {
-      const response = await fetch("http://localhost:8000/api/disease/chat", {
+      const response = await fetch("/api/disease/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ session_id: sessionId, question })
+        body: JSON.stringify({ session_id: sessionId, question, language: i18n.language })
       });
       
       const result = await response.json();
@@ -190,7 +191,7 @@ export default function Disease() {
             <div className="card-base flex-1 flex flex-col items-center justify-center min-h-[400px]">
               <Loader2 size={48} className="text-[#16a34a] animate-spin mb-4" />
               <h3 className="text-xl font-bold text-[#111827] dark:text-[#e6edf3] mb-2">{t('disease.analyzing')}</h3>
-              <p className="text-sm text-[#4b5563] dark:text-[#8b949e]">This might take up to a minute. Extracting AI overview...</p>
+              <p className="text-sm text-[#4b5563] dark:text-[#8b949e]">{t('This might take up to a minute. Extracting AI overview...')}</p>
             </div>
           ) : !sessionId ? (
             <div className="card-base flex-1 flex flex-col items-center justify-center min-h-[400px] border-dashed border-2 border-gray-200 dark:border-[#30363d] bg-transparent">

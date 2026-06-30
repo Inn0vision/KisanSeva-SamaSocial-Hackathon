@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
-import { Map, Leaf, FlaskConical, Sprout, Activity, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { Leaf, FlaskConical, Activity, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 
 export default function Land() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   const [formData, setFormData] = useState({
     crop: 'Wheat',
@@ -23,7 +23,7 @@ export default function Land() {
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
     try {
-      const response = await axios.post('http://localhost:8000/api/land/analyze', formData);
+      const response = await axios.post('/api/land/analyze', { ...formData, language: i18n.language });
       setResult(response.data);
     } catch (error) {
       console.error(error);
@@ -47,11 +47,11 @@ export default function Land() {
         <div className="inline-flex items-center justify-center p-4 bg-emerald-500/10 text-emerald-500 rounded-full mb-4 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
           <FlaskConical size={36} />
         </div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
-          AI Soil Health Analysis
+        <h1 className="text-4xl md:text-5xl font-extrabold text-emerald-950 dark:text-white mb-4 tracking-tight">
+          {t('AI Soil Health Analysis')}
         </h1>
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Input your known soil attributes and let our Gemini AI engine diagnose your land's health, predicting vulnerabilities and generating a custom fertilization plan.
+        <p className="text-lg md:text-xl text-emerald-800/80 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          {t('Input your known soil attributes and let our KisanSeva AI engine diagnose your land\'s health, predicting vulnerabilities and generating a custom fertilization plan.')}
         </p>
       </motion.div>
 
@@ -70,43 +70,43 @@ export default function Land() {
               
               <div className="space-y-8">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Target Crop</label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 uppercase tracking-wider">{t('Target Crop')}</label>
                   <input 
                     type="text" 
                     value={formData.crop}
                     onChange={e => setFormData({...formData, crop: e.target.value})}
-                    className="w-full bg-slate-900/80 border border-slate-700/50 rounded-xl px-4 py-4 text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all placeholder-slate-600"
+                    className="w-full bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/50 rounded-xl px-4 py-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all placeholder-slate-400 dark:placeholder-slate-600"
                     placeholder="e.g., Wheat, Soybean, Cotton"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Soil Type</label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 uppercase tracking-wider">{t('Soil Type')}</label>
                   <select 
                     value={formData.soil_type}
                     onChange={e => setFormData({...formData, soil_type: e.target.value})}
-                    className="w-full bg-slate-900/80 border border-slate-700/50 rounded-xl px-4 py-4 text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all appearance-none"
+                    className="w-full bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700/50 rounded-xl px-4 py-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all appearance-none"
                   >
-                    <option value="Sandy">Sandy</option>
-                    <option value="Clay">Clay</option>
-                    <option value="Silt">Silt</option>
-                    <option value="Loam">Loam</option>
-                    <option value="Peaty">Peaty</option>
-                    <option value="Saline">Saline</option>
+                    <option value="Sandy">{t('Sandy')}</option>
+                    <option value="Clay">{t('Clay')}</option>
+                    <option value="Silt">{t('Silt')}</option>
+                    <option value="Loam">{t('Loam')}</option>
+                    <option value="Peaty">{t('Peaty')}</option>
+                    <option value="Saline">{t('Saline')}</option>
                   </select>
                 </div>
 
-                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800/50">
-                  <label className="block text-sm font-semibold text-slate-300 mb-4 flex justify-between uppercase tracking-wider">
-                    <span>pH Level</span>
-                    <span className="text-emerald-400 font-bold text-lg">{formData.ph}</span>
+                <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800/50">
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 flex justify-between uppercase tracking-wider">
+                    <span>{t('pH Level')}</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold text-lg">{formData.ph}</span>
                   </label>
                   <input 
                     type="range" 
                     min="0" max="14" step="0.1"
                     value={formData.ph}
                     onChange={e => setFormData({...formData, ph: parseFloat(e.target.value)})}
-                    className="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                    className="w-full h-3 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                   />
                   <div className="flex justify-between text-xs font-medium text-slate-500 mt-3 uppercase">
                     <span>0 (Acidic)</span>
@@ -117,14 +117,14 @@ export default function Land() {
               </div>
 
               <div className="space-y-8">
-                <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800/50 space-y-6">
-                  <h3 className="text-sm font-semibold text-emerald-500 mb-2 uppercase tracking-wider">Macronutrients (NPK)</h3>
+                <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800/50 space-y-6">
+                  <h3 className="text-sm font-semibold text-emerald-600 dark:text-emerald-500 mb-2 uppercase tracking-wider">Macronutrients (NPK)</h3>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Nitrogen (N)</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Nitrogen (N)</label>
                     <select 
                       value={formData.nitrogen}
                       onChange={e => setFormData({...formData, nitrogen: e.target.value})}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                      className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                     >
                       <option value="Low">Low (Depleted)</option>
                       <option value="Medium">Medium (Optimal)</option>
@@ -133,11 +133,11 @@ export default function Land() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Phosphorus (P)</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Phosphorus (P)</label>
                     <select 
                       value={formData.phosphorus}
                       onChange={e => setFormData({...formData, phosphorus: e.target.value})}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                      className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                     >
                       <option value="Low">Low (Depleted)</option>
                       <option value="Medium">Medium (Optimal)</option>
@@ -146,11 +146,11 @@ export default function Land() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Potassium (K)</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Potassium (K)</label>
                     <select 
                       value={formData.potassium}
                       onChange={e => setFormData({...formData, potassium: e.target.value})}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+                      className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
                     >
                       <option value="Low">Low (Depleted)</option>
                       <option value="Medium">Medium (Optimal)</option>
@@ -167,7 +167,7 @@ export default function Land() {
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
               <Activity size={28} className="relative z-10" />
-              <span className="relative z-10">Analyze Soil with Gemini AI</span>
+              <span className="relative z-10">{t('Analyze Soil with KisanSeva AI')}</span>
             </button>
           </motion.div>
         )}
@@ -186,17 +186,17 @@ export default function Land() {
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="absolute inset-0 bg-emerald-500 rounded-full blur-2xl"
               />
-              <div className="absolute inset-0 bg-slate-900 rounded-full border-4 border-emerald-500/50 flex items-center justify-center shadow-[0_0_60px_rgba(16,185,129,0.5)]">
+              <div className="absolute inset-0 bg-slate-50 dark:bg-slate-900 rounded-full border-4 border-emerald-500/50 flex items-center justify-center shadow-[0_0_60px_rgba(16,185,129,0.5)]">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                 >
-                  <RefreshCw size={50} className="text-emerald-400" />
+                  <RefreshCw size={50} className="text-emerald-600 dark:text-emerald-400" />
                 </motion.div>
               </div>
             </div>
-            <h2 className="text-3xl font-extrabold text-white mb-3 tracking-tight">Gemini AI is analyzing...</h2>
-            <p className="text-emerald-400/80 animate-pulse text-lg">Running agronomic simulations and nutrient mapping</p>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 tracking-tight">{t('KisanSeva AI is analyzing...')}</h2>
+            <p className="text-emerald-600 dark:text-emerald-400/80 animate-pulse text-lg">{t('Running agronomic simulations and nutrient mapping')}</p>
           </motion.div>
         )}
 
@@ -209,7 +209,7 @@ export default function Land() {
           >
             <div className="card-base p-1 border-t-4 border-t-emerald-500 overflow-hidden relative">
               <div className="absolute inset-0 bg-emerald-500/5 blur-3xl" />
-              <div className="relative bg-slate-900/90 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
+              <div className="relative bg-white/90 dark:bg-slate-900/90 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
                 
                 <div className="shrink-0 relative">
                   <svg className="w-48 h-48 drop-shadow-2xl" viewBox="0 0 100 100">
@@ -238,20 +238,20 @@ export default function Land() {
                     >
                       {result.score}
                     </motion.span>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Health Score</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">{t('Health Score')}</span>
                   </div>
                 </div>
 
                 <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3">Assessment Complete</h2>
-                  <p className="text-slate-400 text-lg mb-8">
-                    Based on your <span className="text-emerald-400 font-semibold">{formData.soil_type}</span> soil profile for growing <span className="text-emerald-400 font-semibold">{formData.crop}</span>.
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">{t('Assessment Complete')}</h2>
+                  <p className="text-slate-600 dark:text-slate-400 text-lg mb-8">
+                    {t('Based on your')} <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{formData.soil_type}</span> {t('soil profile for growing')} <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{formData.crop}</span>.
                   </p>
                   <button 
                     onClick={resetForm}
-                    className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all inline-flex items-center gap-3 font-semibold hover:-translate-y-1 shadow-lg border border-slate-700"
+                    className="px-8 py-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white rounded-xl transition-all inline-flex items-center gap-3 font-semibold hover:-translate-y-1 shadow-lg border border-slate-200 dark:border-slate-700"
                   >
-                    <RefreshCw size={18} /> Analyze Another Field
+                    <RefreshCw size={18} /> {t('Analyze Another Field')}
                   </button>
                 </div>
               </div>
@@ -262,15 +262,15 @@ export default function Land() {
               <div className="absolute top-0 right-0 p-8 opacity-5">
                 <Leaf size={200} />
               </div>
-              <div className="relative z-10 text-slate-300 leading-relaxed text-lg
-                [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-white [&>h1]:mb-6 [&>h1]:mt-8
-                [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-emerald-400 [&>h2]:mb-4 [&>h2]:mt-8 [&>h2]:pb-2 [&>h2]:border-b [&>h2]:border-slate-800
-                [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mb-3 [&>h3]:mt-6
+              <div className="relative z-10 text-slate-700 dark:text-slate-300 leading-relaxed text-lg
+                [&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-slate-900 dark:[&>h1]:text-white [&>h1]:mb-6 [&>h1]:mt-8
+                [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-emerald-600 dark:[&>h2]:text-emerald-400 [&>h2]:mb-4 [&>h2]:mt-8 [&>h2]:pb-2 [&>h2]:border-b [&>h2]:border-slate-200 dark:[&>h2]:border-slate-800
+                [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-slate-900 dark:[&>h3]:text-white [&>h3]:mb-3 [&>h3]:mt-6
                 [&>p]:mb-6
                 [&>ul]:list-disc [&>ul]:pl-6 [&>ul]:mb-6 [&>ul]:space-y-2 [&>ul>li::marker]:text-emerald-500
                 [&>ol]:list-decimal [&>ol]:pl-6 [&>ol]:mb-6 [&>ol]:space-y-2
-                [&>strong]:text-white [&>strong]:font-semibold
-                [&>blockquote]:border-l-4 [&>blockquote]:border-emerald-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-slate-400
+                [&>strong]:text-slate-900 dark:[&>strong]:text-white [&>strong]:font-semibold
+                [&>blockquote]:border-l-4 [&>blockquote]:border-emerald-500 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-slate-600 dark:[&>blockquote]:text-slate-400
               ">
                 <ReactMarkdown>{result.report}</ReactMarkdown>
               </div>

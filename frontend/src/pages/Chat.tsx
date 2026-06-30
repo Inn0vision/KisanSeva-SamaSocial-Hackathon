@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, Bot, User, Sparkles, Loader2 } from 'lucide-react'
 import { useAuthStore } from '../store/authStore'
+import { useTranslation } from 'react-i18next'
 
 type Message = {
   id: string;
@@ -19,11 +20,12 @@ const SUGGESTED_QUESTIONS = [
 
 export default function Chat() {
   const { profile } = useAuthStore();
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'msg-0',
       role: 'assistant',
-      content: `Hello ${profile?.name?.split(' ')[0] || 'there'}! I'm your AgroSetu AI Assistant. I can help you with crop management, weather forecasts, disease detection, and government schemes. What would you like to know today?`,
+      content: `Hello ${profile?.name?.split(' ')[0] || 'there'}! I'm your KisanSeva AI Assistant. I can help you with crop management, weather forecasts, disease detection, and government schemes. What would you like to know today?`,
       timestamp: new Date()
     }
   ]);
@@ -76,9 +78,9 @@ export default function Chat() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-[#111827] dark:text-[#e6edf3] flex items-center gap-2">
-            AI Assistant <Sparkles size={18} className="text-[#16a34a]" />
+            {t('AI Assistant')} <Sparkles size={18} className="text-[#16a34a]" />
           </h1>
-          <p className="text-sm text-[#6b7280] dark:text-[#8b949e]">Personalized farming intelligence</p>
+          <p className="text-sm text-[#6b7280] dark:text-[#8b949e]">{t('Personalized farming intelligence')}</p>
         </div>
       </div>
 

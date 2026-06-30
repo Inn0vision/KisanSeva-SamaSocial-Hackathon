@@ -9,3 +9,5 @@ python-multipart>=0.0.6
 playwright
 sambanova
 python-frontmatter
+google-genai
+gunicorn

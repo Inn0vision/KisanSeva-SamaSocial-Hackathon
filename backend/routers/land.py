@@ -15,6 +15,7 @@ class SoilAttributes(BaseModel):
     potassium: str
     soil_type: str
     crop: str
+    language: str = "en"
 
 class LandAnalysisResponse(BaseModel):
     score: int
@@ -35,13 +36,13 @@ async def analyze_land(attrs: SoilAttributes):
             f"- Nitrogen (N): {attrs.nitrogen}\n"
             f"- Phosphorus (P): {attrs.phosphorus}\n"
             f"- Potassium (K): {attrs.potassium}\n\n"
-            "Provide a comprehensive, beautifully formatted Markdown report containing:\n"
+            "Provide a comprehensive, beautifully formatted Markdown short report (not so big repot)containing:\n"
             "1. An overarching summary of the soil health.\n"
             "2. Specific vulnerabilities/weaknesses based on these metrics.\n"
             "3. Actionable organic and chemical recommendations to improve this soil for the target crop.\n"
+            f"IMPORTANT: You MUST respond entirely in the language corresponding to this code and replye shold be short not big long : {attrs.language} (e.g., 'hi' for Hindi, 'mr' for Marathi, 'en' for English).\n"
             "End your response with a single line containing exactly the text 'FINAL_SCORE: X', where X is an integer out of 100 representing the overall soil health score."
         )
-        
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt,

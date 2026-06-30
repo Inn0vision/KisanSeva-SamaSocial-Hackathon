@@ -58,7 +58,7 @@ export default function Signup() {
           </div>
           
           <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Join AgroSetu
+            Join KisanSeva
           </h2>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-8 text-sm">
             Create an account to get personalized farming insights

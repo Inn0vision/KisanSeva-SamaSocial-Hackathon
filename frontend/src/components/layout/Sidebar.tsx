@@ -85,7 +85,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <Leaf size={20} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-base font-bold text-[#111827] dark:text-[#e6edf3] leading-none mb-1 tracking-tight">AgroSetu</h1>
+            <h1 className="text-base font-bold text-[#111827] dark:text-[#e6edf3] leading-none mb-1 tracking-tight">KisanSeva</h1>
             <p className="text-[0.65rem] text-[#9ca3af] dark:text-[#8b949e] font-medium leading-none tracking-wider">धरती · CLIMATE AI</p>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <ThemeToggle />
         </div>
         <div className="text-[10px] text-[#9ca3af] dark:text-[#484f58] font-medium tracking-wider">
-          v1.0.0 · AgroSetu
+          v1.0.0 · KisanSeva
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import EmptyState from '../components/shared/EmptyState'
 import { useAuthStore } from '../store/authStore'
+import { useTranslation } from 'react-i18next'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -14,6 +15,7 @@ interface Message {
 
 export default function Pesticide() {
   const { profile } = useAuthStore()
+  const { t, i18n } = useTranslation()
   
   const [messages, setMessages] = useState<Message[]>(() => {
     const saved = localStorage.getItem('farmer_ai_chat')
@@ -54,13 +56,14 @@ export default function Pesticide() {
       // Map frontend history to backend expected format
       const historyToSend = messages.map(m => ({ role: m.role, content: m.content }))
       
-      const response = await fetch('http://localhost:8000/api/okf/chat', {
+      const response = await fetch('/api/okf/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: userMsg,
           history: historyToSend,
-          user_name: profile?.name?.split(' ')[0] || 'Farmer'
+          user_name: profile?.name?.split(' ')[0] || 'Farmer',
+          language: i18n.language
         })
       })
 
@@ -93,8 +96,8 @@ export default function Pesticide() {
           <Leaf size={20} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-[#111827] dark:text-[#e6edf3]">Farmer AI Guide</h1>
-          <p className="text-sm text-[#4b5563] dark:text-[#8b949e]">Your intelligent 24/7 agricultural assistant</p>
+          <h1 className="text-2xl font-bold text-[#111827] dark:text-[#e6edf3]">{t('Farmer AI Guide')}</h1>
+          <p className="text-sm text-[#4b5563] dark:text-[#8b949e]">{t('Your intelligent 24/7 agricultural assistant')}</p>
         </div>
         
         {messages.length > 0 && (
@@ -102,7 +105,7 @@ export default function Pesticide() {
             onClick={() => setMessages([])} 
             className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-500 hover:text-red-500 bg-white dark:bg-[#161b22] border border-gray-200 dark:border-[#30363d] rounded-lg shadow-sm transition-colors"
           >
-            <Trash2 size={14} /> Clear Chat
+            <Trash2 size={14} /> {t('Clear Chat')}
           </button>
         )}
       </div>
@@ -112,7 +115,7 @@ export default function Pesticide() {
           <div className="flex-1 flex items-center justify-center p-6">
             <EmptyState 
               icon={Leaf}
-              title="Ask the AgroSetu Farmer AI"
+              title="Ask the KisanSeva Farmer AI"
               description="Ask any question about crops, pests, diseases, fertilizers, or general farming best practices to get expert recommendations."
               actionLabel="Type a message below to start"
               onAction={() => {}}
@@ -182,7 +185,7 @@ export default function Pesticide() {
                 <div className="bg-white dark:bg-[#161b22] border border-gray-100 dark:border-[#30363d] shadow-sm rounded-2xl rounded-tl-sm px-5 py-4 flex flex-col gap-2">
                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 font-medium">
                      <Loader2 size={16} className="animate-spin text-[#16a34a]" />
-                     Thinking...
+                     {t('Thinking...')}
                    </div>
                    <div className="flex gap-1">
                      <span className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 animate-bounce" style={{ animationDelay: '0ms' }} />

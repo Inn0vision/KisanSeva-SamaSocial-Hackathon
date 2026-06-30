@@ -119,7 +119,7 @@ export default function Weather() {
                     <span className="text-2xl font-bold text-[#111827] dark:text-[#e6edf3]">
                       {data.agronomy.et0.toFixed(2)}
                     </span>
-                    <span className="text-sm text-gray-500 mb-1">mm/hr</span>
+                    <span className="text-sm text-gray-500 mb-1">{t('mm/hr')}</span>
                   </div>
                   <div className="w-full bg-gray-100 dark:bg-[#30363d] h-1.5 rounded-full mt-2 overflow-hidden">
                     <div className="bg-orange-400 h-full" style={{ width: `${Math.min((data.agronomy.et0 / 0.5) * 100, 100)}%` }}></div>

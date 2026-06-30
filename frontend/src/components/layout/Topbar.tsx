@@ -42,7 +42,7 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
           <div className="w-7 h-7 rounded-md gradient-green flex items-center justify-center text-white">
             <Leaf size={16} strokeWidth={2.5} />
           </div>
-          <span className="font-bold text-[#111827] dark:text-[#e6edf3]">AgroSetu</span>
+          <span className="font-bold text-[#111827] dark:text-[#e6edf3]">KisanSeva</span>
         </div>
         
         <h2 className="hidden lg:block text-lg font-semibold text-[#111827] dark:text-[#e6edf3]">
