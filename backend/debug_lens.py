@@ -34,7 +34,6 @@ async def run():
         
         # Let's create a dummy green image
         img_path = "temp_leaf.png"
-        import image_creation
         # We can write a simple PNG in python using standard library or PIL if available.
         # But wait, we can just use a real file if there is one.
         # Let's look for a file to upload.
