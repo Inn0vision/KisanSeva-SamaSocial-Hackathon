@@ -13,15 +13,11 @@ services:
     restart: on-failure
     environment:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - GOOGLE_EMAIL=${GOOGLE_EMAIL}
-      - GOOGLE_PASSWORD=${GOOGLE_PASSWORD}
       - SAMBANOVA_API_KEY=${SAMBANOVA_API_KEY}
     networks:
       - kisanseva_net
     ports:
       - "8000:8000"
-    volumes:
-      - playwright_data:/root/.config/playwright
     deploy:
       resources:
         limits:
@@ -57,6 +53,3 @@ services:
     depends_on:
       backend:
         condition: service_healthy
-
-volumes:
-  playwright_data:

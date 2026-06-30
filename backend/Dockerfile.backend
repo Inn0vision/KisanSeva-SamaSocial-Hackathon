@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/python:v1.40.0-jammy
+FROM python:3.10-slim
 
 WORKDIR /app
 
@@ -6,10 +6,6 @@ COPY requirements.txt .
 # Use BuildKit cache mount for pip
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install -r requirements.txt
-
-# Install browsers for playwright
-RUN playwright install chromium
-RUN playwright install-deps
 
 COPY . .
 
