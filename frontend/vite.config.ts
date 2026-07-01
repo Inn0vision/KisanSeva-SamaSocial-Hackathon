@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        maximumFileSizeToCacheInBytes: 20 * 1024 * 1024 // 20 MB
+      },
       manifest: {
         name: 'KisanSeva - Farmer AI Assistant',
         short_name: 'KisanSeva',
