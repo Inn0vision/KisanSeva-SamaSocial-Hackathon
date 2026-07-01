@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Microscope, Upload, Search, Loader2, Send, Bot, User, Trash2, Clock, ChevronRight } from 'lucide-react'
+import { Microscope, Upload, Search, Loader2, Send, Bot, User, Trash2, Clock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useScanStore } from '../store/scanStore'
 
