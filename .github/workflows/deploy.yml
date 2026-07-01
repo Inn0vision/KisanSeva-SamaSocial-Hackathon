@@ -42,9 +42,9 @@ jobs:
               --build-arg VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID \
               -t agrosetu-app .
             
-            # Run the new container on port 80 (redirecting to 8000 inside)
+            # Run the new container on port 8000 (redirecting to 8000 inside)
             # using the existing .env file on the server
-            docker run -d --name agrosetu-app -p 80:8000 --env-file .env agrosetu-app
+            docker run -d --name agrosetu-app -p 8000:8000 --env-file .env agrosetu-app
             
             # Remove old unused images to save disk space
             docker image prune -f
