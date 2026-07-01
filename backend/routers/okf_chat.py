@@ -148,9 +148,11 @@ async def chat_endpoint(request: ChatRequest):
                 assistant_reply = response.choices[0].message.content
                 print("=====================================")
                 print(f"Model used for {request.user_name}: {GROQ_MODEL_NAME} (Groq)")
+                if hasattr(response, 'usage') and response.usage:
+                    print(f"Tokens - Input: {response.usage.prompt_tokens}, Output: {response.usage.completion_tokens}, Total: {response.usage.total_tokens}")
                 print("=====================================")
             except Exception as e:
-                print(f"Groq API failed: {e}. Falling back to SambaNova...")
+                print(f"Groq API failed (possibly due to token limits): {e}. Falling back to SambaNova...")
                 
         # 5. Fallback to SambaNova API if Groq fails or is not available
         if not assistant_reply and client:
@@ -164,6 +166,8 @@ async def chat_endpoint(request: ChatRequest):
                 assistant_reply = response.choices[0].message.content
                 print("=====================================")
                 print(f"Model used for {request.user_name}: {SAMBANOVA_MODEL_NAME} (SambaNova Fallback)")
+                if hasattr(response, 'usage') and response.usage:
+                    print(f"Tokens - Input: {response.usage.prompt_tokens}, Output: {response.usage.completion_tokens}, Total: {response.usage.total_tokens}")
                 print("=====================================")
             except Exception as e:
                 print(f"SambaNova Fallback API failed: {e}.")
