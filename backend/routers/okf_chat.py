@@ -6,8 +6,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from sambanova import SambaNova
-from google import genai
-from google.genai import types
+import groq
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,11 +14,12 @@ load_dotenv()
 router = APIRouter(prefix="/api/okf", tags=["OKF Chat"])
 
 SAMBANOVA_API_KEY = os.environ.get("SAMBANOVA_API_KEY")
-MODEL_NAME = "DeepSeek-V3.1"
+SAMBANOVA_MODEL_NAME = "DeepSeek-V3.1"
 
-GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+GROQ_MODEL_NAME = "llama-3.3-70b-versatile"
 
-# Initialize SambaNova Client
+# Initialize SambaNova Client (Fallback)
 client = None
 if SAMBANOVA_API_KEY:
     try:
@@ -30,12 +30,13 @@ if SAMBANOVA_API_KEY:
     except Exception as e:
         print(f"Warning: Failed to initialize SambaNova client: {e}")
 
-gemini_client = None
-if GOOGLE_API_KEY:
+# Initialize Groq Client (Primary)
+groq_client = None
+if GROQ_API_KEY:
     try:
-        gemini_client = genai.Client(api_key=GOOGLE_API_KEY)
+        groq_client = groq.Groq(api_key=GROQ_API_KEY)
     except Exception as e:
-        print(f"Warning: Failed to initialize Gemini client: {e}")
+        print(f"Warning: Failed to initialize Groq client: {e}")
 
 class OKFKnowledgeBase:
     def __init__(self, directory_path):
@@ -97,8 +98,8 @@ class ChatResponse(BaseModel):
 
 @router.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
-    if not client and not gemini_client:
-        raise HTTPException(status_code=500, detail="No AI API Keys configured in .env")
+    if not groq_client and not client:
+        raise HTTPException(status_code=500, detail="No AI API Keys configured in .env (Groq or SambaNova required)")
         
     try:
         user_query = request.message
@@ -129,60 +130,46 @@ async def chat_endpoint(request: ChatRequest):
         
         assistant_reply = None
         
-        if gemini_client:
-            try:
-                contents = []
-                for msg in request.history:
-                    role = "user" if msg.role == "user" else "model"
-                    contents.append(
-                        types.Content(
-                            role=role, 
-                            parts=[types.Part.from_text(text=msg.content)]
-                        )
-                    )
-                contents.append(
-                    types.Content(
-                        role="user",
-                        parts=[types.Part.from_text(text=augmented_prompt)]
-                    )
-                )
+        # Assemble standard messages for Groq/SambaNova
+        messages = [{"role": "system", "content": system_prompt}]
+        for msg in request.history:
+            messages.append({"role": msg.role, "content": msg.content})
+        messages.append({"role": "user", "content": augmented_prompt})
 
-                response = gemini_client.models.generate_content(
-                    model="gemini-2.5-flash",
-                    contents=contents,
-                    config=types.GenerateContentConfig(
-                        system_instruction=system_prompt,
-                        temperature=0.3,
-                        top_p=0.9
-                    )
+        # 4. Primary: Try Groq API
+        if groq_client:
+            try:
+                response = groq_client.chat.completions.create(
+                    model=GROQ_MODEL_NAME,
+                    messages=messages,
+                    temperature=0.3,
+                    top_p=0.9
                 )
-                assistant_reply = response.text
+                assistant_reply = response.choices[0].message.content
                 print("=====================================")
-                print(f"Model used for {request.user_name}: gemini-2.5-flash")
+                print(f"Model used for {request.user_name}: {GROQ_MODEL_NAME} (Groq)")
                 print("=====================================")
             except Exception as e:
-                print(f"Gemini API failed: {e}. Falling back to SambaNova...")
+                print(f"Groq API failed: {e}. Falling back to SambaNova...")
                 
-        # 4. Fallback to SambaNova API if Gemini fails or is not available
+        # 5. Fallback to SambaNova API if Groq fails or is not available
         if not assistant_reply and client:
-            messages = [{"role": "system", "content": system_prompt}]
-            for msg in request.history:
-                messages.append({"role": msg.role, "content": msg.content})
-            messages.append({"role": "user", "content": augmented_prompt})
-            
-            response = client.chat.completions.create(
-                model=MODEL_NAME,
-                messages=messages,
-                temperature=0.3,
-                top_p=0.9
-            )
-            assistant_reply = response.choices[0].message.content
-            print("=====================================")
-            print(f"Model used for {request.user_name}: DeepSeek-V3.1 (SambaNova Fallback)")
-            print("=====================================")
+            try:
+                response = client.chat.completions.create(
+                    model=SAMBANOVA_MODEL_NAME,
+                    messages=messages,
+                    temperature=0.3,
+                    top_p=0.9
+                )
+                assistant_reply = response.choices[0].message.content
+                print("=====================================")
+                print(f"Model used for {request.user_name}: {SAMBANOVA_MODEL_NAME} (SambaNova Fallback)")
+                print("=====================================")
+            except Exception as e:
+                print(f"SambaNova Fallback API failed: {e}.")
 
         if not assistant_reply:
-            raise HTTPException(status_code=500, detail="All AI models failed to respond.")
+            raise HTTPException(status_code=500, detail="All AI models failed to respond. Please try again later.")
         
         # Extract source names for frontend citation
         sources = []
